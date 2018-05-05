@@ -1,16 +1,34 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Dynamic;
+using Unity.Collections;
 using UnityEngine;
 
-public class AiDirectorScript : MonoBehaviour {
+public class AiDirectorScript : MonoBehaviour
+{
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    [SerializeField] private bool CohesionToggle = true;
+    [SerializeField] private bool PersonalSpaceToggle = true;
+    [SerializeField] private bool GroupCenterMassToggle = true;
+
+    private NativeArray<MobComponentData> allMobs;
+
+    struct MobComponentData
+    {
+        public Vector3 Velocity;
+
+        // match speed
+        public Vector3 Cohesion;
+        public float CohesionScale;
+        public float CohesionRadius;
+
+        // personal space
+        public Vector3 Avoidance;
+        public float AvoidanceScale;
+        public float AvoidanceRadius;
+
+        // target center of group
+        public Vector3 GroupCenterMass;
+        public float GroupCenterMassScale;
+    } 
+
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }

@@ -24,6 +24,7 @@ public class AIDirectorScript : MonoBehaviour
     private NativeArray<PersonalSpaceJobOutput> personalSpaceOutputs;
 
     private NativeArray<Vector3> moveToPlayerOutput;
+    private Transform playerTransform;
 
 
     struct CenterMassJob : IJobParallelFor
@@ -71,6 +72,7 @@ public class AIDirectorScript : MonoBehaviour
 
     private void Start()
     {
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         allMobs = new GameObject[mobCount];
         allMobData = new NativeArray<MobComponentData>(mobCount, Allocator.Persistent);
 
@@ -95,14 +97,14 @@ public class AIDirectorScript : MonoBehaviour
 
     private void Update()
     {
-        Vector3 zero = Vector3.zero;
+        Vector3 playerPos = playerTransform.position;
         moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.TempJob);
 
 
         var moveToPlayerJob = new MoveToPlayerJob()
         {
             allMobs = allMobData,
-            playerPos = zero,
+            playerPos = playerPos,
             output = moveToPlayerOutput
         };
 

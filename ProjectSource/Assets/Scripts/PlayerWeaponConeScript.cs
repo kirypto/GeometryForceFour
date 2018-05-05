@@ -11,9 +11,12 @@ public class PlayerWeaponConeScript : MonoBehaviour
         _weaponCone = transform.Find("WeaponCone");
         _weaponConeTriangleComponent = _weaponCone.Find("TriangleComponent");
         _weaponConeOvalComponent = _weaponCone.Find("OvalComponent");
+    }
 
-        print(_weaponCone);
-        print(_weaponConeTriangleComponent);
-        print(_weaponConeOvalComponent);
+    private void Update()
+    {
+        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
+        Vector2 vectorToMouse = ((Vector2)(mousePosition - transform.position)).normalized;
+        transform.right = vectorToMouse;
     }
 }

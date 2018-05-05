@@ -73,6 +73,7 @@ GameObject:
   - component: {fileID: 58147843676110484}
   - component: {fileID: 114010949852073760}
   - component: {fileID: 114082580519314054}
+  - component: {fileID: 114748884908734108}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -236,6 +237,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponForce: 50
+--- !u!114 &114748884908734108
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529518770281376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d120ad0825c1b94d8d05e5b4b391219, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _startingHealth: 100
+  _damagePerHit: 5
+  _sheildRegenDelayTime: 2
+  _sheildRegenIterationTime: 0.2
+  _sheildRegenIterationAmount: 3
 --- !u!212 &212168330055993998
 SpriteRenderer:
   m_ObjectHideFlags: 1

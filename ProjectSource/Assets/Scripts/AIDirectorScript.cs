@@ -68,7 +68,7 @@ public class AIDirectorScript : MonoBehaviour
             {
                 float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
 
-                if (dist > 0 && dist < input[i].PersonalSpaceRadius)
+                if (dist > 0 && dist < input[index].PersonalSpaceRadius)
                 {
                     Vector3 diff = Vector3.Normalize(allMobs[index].Position - friends[i].Position);
                     diff = diff / dist;
@@ -80,6 +80,37 @@ public class AIDirectorScript : MonoBehaviour
             output[index] = new PersonalSpaceJobOutput()
             {
                 PersonalSpace = avoidance * input[index].PersonalSpaceScale
+            };
+        }
+    }
+
+    struct EqualizeSpeedJob : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<EqualizeSpeedJobInput> input;
+        [ReadOnly] public NativeArray<MobComponentData> allMobs;
+        [ReadOnly] public NativeArray<MobComponentData> friends;
+
+        public NativeArray<EqualizeSpeedJobOutput> output;
+
+        public void Execute(int index)
+        {
+            Vector3 perceivedVelocity = Vector3.zero;
+
+            for (int i = 0; i < friends.Length; i++)
+            {
+                float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
+
+                if (dist < input[index].EqualizeSpeedRadius)
+                {
+                    perceivedVelocity += friends[i].Velocity;
+                }
+            }
+            
+            perceivedVelocity = (friends.Length > 1) ? perceivedVelocity / (friends.Length) : perceivedVelocity;
+
+            output[index] = new EqualizeSpeedJobOutput()
+            {
+                EqualizeSpeed = ((perceivedVelocity - allMobs[index].Velocity) / 8f) * input[index].EqualizeSpeedScale
             };
         }
     }
@@ -115,8 +146,15 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
         personalSpaceInputs = GetPrepopArray(new PersonalSpaceJobInput()
         {
-            PersonalSpaceRadius = 1.5f,
+            PersonalSpaceRadius = 0.5f,
             PersonalSpaceScale = 1f
+        });
+
+        equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
+        equalizeSpeedInputs = GetPrepopArray(new EqualizeSpeedJobInput()
+        {
+            EqualizeSpeedRadius = 5f,
+            EqualizeSpeedScale = 1f
         });
 
         SpawnMobs();
@@ -178,9 +216,20 @@ public class AIDirectorScript : MonoBehaviour
         JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64);
 
 
+        EqualizeSpeedJob equalizeSpeedJob = new EqualizeSpeedJob()
+        {
+            allMobs = allMobData,
+            friends = allMobData,
+            input = equalizeSpeedInputs,
+            output = equalizeSpeedOutputs
+        };
+        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64);
+
+
         jobHandle.Complete();
         centerMassJobHandle.Complete();
         personalSpaceJobHandle.Complete();
+        equalizeSpeedJobHandle.Complete();
         for (var i = 0; i < allMobs.Length; i++)
         {
             var data = allMobData[i];
@@ -188,10 +237,12 @@ public class AIDirectorScript : MonoBehaviour
             data.Velocity += moveToPlayerOutput[i];
             data.Velocity += centerMassOutputs[i].GroupCenterMass;
             data.Velocity += personalSpaceOutputs[i].PersonalSpace;
+            data.Velocity += equalizeSpeedOutputs[i].EqualizeSpeed;
 
 
             GameObject mob = allMobs[i];
             mob.GetComponent<Rigidbody2D>().AddForce(data.Velocity);
+            mob.transform.right = data.Velocity;
             data.Position = mob.transform.position;
             allMobData[i] = data;
         }
@@ -208,6 +259,9 @@ public class AIDirectorScript : MonoBehaviour
 
         personalSpaceInputs.Dispose();
         personalSpaceOutputs.Dispose();
+        
+        equalizeSpeedInputs.Dispose();
+        equalizeSpeedOutputs.Dispose();
     }
 
     private NativeArray<T> GetPrepopArray<T>(T defVal) where T : struct

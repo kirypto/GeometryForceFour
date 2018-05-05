@@ -37,7 +37,7 @@ public class AIDirectorScript : MonoBehaviour
         {
             Vector3 center = Vector3.zero;
 
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < friends.Length; i++)
             {
                 center += friends[i].Position;
             }
@@ -48,6 +48,38 @@ public class AIDirectorScript : MonoBehaviour
             {
                 GroupCenterMass = ((center - allMobs[index].Position) / 100f) *
                                   input[index].GroupCenterMassScale
+            };
+        }
+    }
+
+    struct PersonalSpaceJob : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<PersonalSpaceJobInput> input;
+        [ReadOnly] public NativeArray<MobComponentData> allMobs;
+        [ReadOnly] public NativeArray<MobComponentData> friends;
+
+        public NativeArray<PersonalSpaceJobOutput> output;
+
+        public void Execute(int index)
+        {
+            Vector3 avoidance = Vector3.zero;
+
+            for (int i = 0; i < friends.Length; i++)
+            {
+                float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
+
+                if (dist > 0 && dist < input[i].PersonalSpaceRadius)
+                {
+                    Vector3 diff = Vector3.Normalize(allMobs[index].Position - friends[i].Position);
+                    diff = diff / dist;
+                    avoidance += diff;
+                }
+            }
+
+
+            output[index] = new PersonalSpaceJobOutput()
+            {
+                PersonalSpace = avoidance * input[index].PersonalSpaceScale
             };
         }
     }
@@ -71,14 +103,27 @@ public class AIDirectorScript : MonoBehaviour
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         allMobs = new GameObject[mobCount];
         allMobData = new NativeArray<MobComponentData>(mobCount, Allocator.Persistent);
+
         moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.Persistent);
+
         centerMassOutputs = new NativeArray<CenterMassJobOutput>(mobCount, Allocator.Persistent);
         centerMassInputs = GetPrepopArray(new CenterMassJobInput()
         {
             GroupCenterMassScale = StdCenterMassScaler
         });
 
+        personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
+        personalSpaceInputs = GetPrepopArray(new PersonalSpaceJobInput()
+        {
+            PersonalSpaceRadius = 1.5f,
+            PersonalSpaceScale = 1f
+        });
 
+        SpawnMobs();
+    }
+
+    private void SpawnMobs()
+    {
         for (int i = 0; i < mobCount; i++)
         {
             var pos = new Vector3()
@@ -123,14 +168,26 @@ public class AIDirectorScript : MonoBehaviour
         JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64);
 
 
+        PersonalSpaceJob personalSpaceJob = new PersonalSpaceJob()
+        {
+            allMobs = allMobData,
+            friends = allMobData,
+            input = personalSpaceInputs,
+            output = personalSpaceOutputs
+        };
+        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64);
+
+
         jobHandle.Complete();
         centerMassJobHandle.Complete();
+        personalSpaceJobHandle.Complete();
         for (var i = 0; i < allMobs.Length; i++)
         {
             var data = allMobData[i];
             data.Velocity = Vector3.zero;
             data.Velocity += moveToPlayerOutput[i];
             data.Velocity += centerMassOutputs[i].GroupCenterMass;
+            data.Velocity += personalSpaceOutputs[i].PersonalSpace;
 
 
             GameObject mob = allMobs[i];
@@ -148,6 +205,9 @@ public class AIDirectorScript : MonoBehaviour
 
         centerMassInputs.Dispose();
         centerMassOutputs.Dispose();
+
+        personalSpaceInputs.Dispose();
+        personalSpaceOutputs.Dispose();
     }
 
     private NativeArray<T> GetPrepopArray<T>(T defVal) where T : struct

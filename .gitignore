@@ -62,3 +62,5 @@ ProjectSource/Assets/Plugins/Editor/JetBrains/*
 #############
 *~
 *.swp
+ProjectSource/Assets/Plugins/Editor.meta
+ProjectSource/Assets/Plugins.meta

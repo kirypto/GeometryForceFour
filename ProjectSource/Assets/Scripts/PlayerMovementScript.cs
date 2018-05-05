@@ -17,15 +17,18 @@ public class PlayerMovementScript : MonoBehaviour
         {
             _rigidbody.AddForce(Vector2.up * _movementForce);
         }
-        else if (Input.GetKey(KeyCode.A))
+
+        if (Input.GetKey(KeyCode.A))
         {
             _rigidbody.AddForce(Vector2.left * _movementForce);
         }
-        else if (Input.GetKey(KeyCode.S))
+
+        if (Input.GetKey(KeyCode.S))
         {
             _rigidbody.AddForce(Vector2.down * _movementForce);
         }
-        else if (Input.GetKey(KeyCode.D))
+
+        if (Input.GetKey(KeyCode.D))
         {
             _rigidbody.AddForce(Vector2.right * _movementForce);
         }

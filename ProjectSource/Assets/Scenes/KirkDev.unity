@@ -161,6 +161,11 @@ Prefab:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 58147843676110484, guid: 1cdf61ba1b009e247924f44a6119d712,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1cdf61ba1b009e247924f44a6119d712, type: 2}
   m_IsPrefabParent: 0
@@ -301,6 +306,11 @@ Prefab:
         type: 2}
       propertyPath: mobCount
       value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: StdCenterMassScaler
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96dd1a44b6e070a4387f298c03a49df3, type: 2}

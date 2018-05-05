@@ -1,15 +1,13 @@
-﻿using System;
-using Unity.Collections;
+﻿using Unity.Collections;
 using Unity.Jobs;
-using Unity.Mathematics;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 public class AIDirectorScript : MonoBehaviour
 {
     [SerializeField] private int mobCount = 100;
     [SerializeField] private GameObject mobPrefab;
     [SerializeField] private bool CenterMassToggle = true;
+    [SerializeField] private float StdCenterMassScaler = 1f;
     [SerializeField] private bool EqualizeSpeedToggle = true;
     [SerializeField] private bool PersonalSpaceToggle = true;
 
@@ -29,29 +27,27 @@ public class AIDirectorScript : MonoBehaviour
 
     struct CenterMassJob : IJobParallelFor
     {
-        [ReadOnly] private NativeArray<CenterMassJobInput> input;
-        [ReadOnly] private NativeArray<MobComponentData> allMobs;
-        [ReadOnly] private NativeArray<MobComponentData> friends;
+        [ReadOnly] public NativeArray<CenterMassJobInput> input;
+        [ReadOnly] public NativeArray<MobComponentData> allMobs;
+        [ReadOnly] public NativeArray<MobComponentData> friends;
 
-        private NativeArray<CenterMassJobOutput> output;
+        public NativeArray<CenterMassJobOutput> output;
 
         public void Execute(int index)
         {
             Vector3 center = Vector3.zero;
 
-            for (int i = 0; index < friends.Length; i++)
+            for (int i = 0; i < 50; i++)
             {
-                if (!friends[i].Equals(allMobs[index]))
-                {
-                    center += friends[i].Position;
-                }
+                center += friends[i].Position;
             }
 
-            center = (friends.Length > 1) ? center / (friends.Length - 1) : center;
+            center = (friends.Length > 1) ? center / (friends.Length) : center;
 
             output[index] = new CenterMassJobOutput()
             {
-                GroupCenterMass = (center - allMobs[index].Position) / 100f
+                GroupCenterMass = ((center - allMobs[index].Position) / 100f) *
+                                  input[index].GroupCenterMassScale
             };
         }
     }
@@ -75,6 +71,13 @@ public class AIDirectorScript : MonoBehaviour
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         allMobs = new GameObject[mobCount];
         allMobData = new NativeArray<MobComponentData>(mobCount, Allocator.Persistent);
+        moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.Persistent);
+        centerMassOutputs = new NativeArray<CenterMassJobOutput>(mobCount, Allocator.Persistent);
+        centerMassInputs = GetPrepopArray(new CenterMassJobInput()
+        {
+            GroupCenterMassScale = StdCenterMassScaler
+        });
+
 
         for (int i = 0; i < mobCount; i++)
         {
@@ -98,7 +101,6 @@ public class AIDirectorScript : MonoBehaviour
     private void Update()
     {
         Vector3 playerPos = playerTransform.position;
-        moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.TempJob);
 
 
         var moveToPlayerJob = new MoveToPlayerJob()
@@ -110,22 +112,52 @@ public class AIDirectorScript : MonoBehaviour
 
         JobHandle jobHandle = moveToPlayerJob.Schedule(mobCount, 64);
 
+
+        CenterMassJob centerMassJob = new CenterMassJob()
+        {
+            allMobs = allMobData,
+            friends = allMobData,
+            input = centerMassInputs,
+            output = centerMassOutputs
+        };
+        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64);
+
+
         jobHandle.Complete();
+        centerMassJobHandle.Complete();
         for (var i = 0; i < allMobs.Length; i++)
         {
-            GameObject mob = allMobs[i];
-            mob.GetComponent<Rigidbody2D>().AddForce(moveToPlayerOutput[i]);
             var data = allMobData[i];
+            data.Velocity = Vector3.zero;
+            data.Velocity += moveToPlayerOutput[i];
+            data.Velocity += centerMassOutputs[i].GroupCenterMass;
+
+
+            GameObject mob = allMobs[i];
+            mob.GetComponent<Rigidbody2D>().AddForce(data.Velocity);
             data.Position = mob.transform.position;
             allMobData[i] = data;
         }
-
-        moveToPlayerOutput.Dispose();
     }
 
 
     private void OnDestroy()
     {
         allMobData.Dispose();
+        moveToPlayerOutput.Dispose();
+
+        centerMassInputs.Dispose();
+        centerMassOutputs.Dispose();
+    }
+
+    private NativeArray<T> GetPrepopArray<T>(T defVal) where T : struct
+    {
+        NativeArray<T> prepopArray = new NativeArray<T>(mobCount, Allocator.Persistent);
+        for (int i = 0; i < prepopArray.Length; i++)
+        {
+            prepopArray[i] = defVal;
+        }
+
+        return prepopArray;
     }
 }

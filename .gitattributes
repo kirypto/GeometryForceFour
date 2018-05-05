@@ -1,0 +1,10 @@
+*               text=auto eol=lf
+
+*.txt           text eol=lf
+*.md            text eol=lf
+*.sh            text eol=lf
+*.sln           text eol=clrf
+*.cs            text eol=lf
+
+*.jpg           -text
+*.png           -text

@@ -170,7 +170,7 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.3
+  m_Radius: 0.25
 --- !u!60 &60475872913582252
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d120ad0825c1b94d8d05e5b4b391219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _startingHealth: 100
+  _initialSheilds: 0
   _damagePerHit: 5
   _sheildRegenDelayTime: 2
   _sheildRegenIterationTime: 0.2

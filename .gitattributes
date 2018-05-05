@@ -10,3 +10,4 @@
 *.png           -text
 *.pdf			-text
 *.unitypackage	-text
+*.chm			-text

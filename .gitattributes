@@ -8,3 +8,4 @@
 
 *.jpg           -text
 *.png           -text
+*.pdf			-text

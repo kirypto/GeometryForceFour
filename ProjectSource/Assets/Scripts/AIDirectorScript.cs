@@ -1,7 +1,9 @@
-﻿using Unity.Collections;
+﻿using System;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class AIDirectorScript : MonoBehaviour
 {
@@ -21,15 +23,8 @@ public class AIDirectorScript : MonoBehaviour
     private NativeArray<PersonalSpaceJobInput> personalSpaceInputs;
     private NativeArray<PersonalSpaceJobOutput> personalSpaceOutputs;
 
+    private NativeArray<Vector3> moveToPlayerOutput;
 
-//
-//    struct FindFriendsJob : IJobParallelFor
-//    {
-//        public void Execute(int index)
-//        {
-//            throw new System.NotImplementedException();
-//        }
-//    }
 
     struct CenterMassJob : IJobParallelFor
     {
@@ -59,6 +54,19 @@ public class AIDirectorScript : MonoBehaviour
             };
         }
     }
+    
+    struct MoveToPlayerJob : IJobParallelFor
+    {
+        [ReadOnly] public NativeArray<MobComponentData> allMobs;
+        [ReadOnly] public Vector3 playerPos;
+
+        public NativeArray<Vector3> output;
+
+        public void Execute(int index)
+        {
+            output[index] = playerPos - allMobs[index].Position ;
+        }
+    }
 
 
     private void Start()
@@ -83,6 +91,31 @@ public class AIDirectorScript : MonoBehaviour
             allMobData[i] = mobData;
         }
     }
+
+    private void Update()
+    {
+        Vector3 zero = Vector3.zero;
+        moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.TempJob);
+
+
+        var moveToPlayerJob = new MoveToPlayerJob()
+        {
+            allMobs = allMobData,
+            playerPos = zero,
+            output = moveToPlayerOutput
+        };
+
+        JobHandle jobHandle = moveToPlayerJob.Schedule(mobCount, 64);
+
+        jobHandle.Complete();
+        for (var i = 0; i < allMobs.Length; i++)
+        {
+            GameObject mob = allMobs[i];
+            mob.GetComponent<Rigidbody2D>().AddForce(moveToPlayerOutput[i]);
+        }
+        moveToPlayerOutput.Dispose();
+    }
+
 
     private void OnDestroy()
     {

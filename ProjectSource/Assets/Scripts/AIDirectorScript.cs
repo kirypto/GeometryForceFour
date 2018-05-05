@@ -54,7 +54,7 @@ public class AIDirectorScript : MonoBehaviour
             };
         }
     }
-    
+
     struct MoveToPlayerJob : IJobParallelFor
     {
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
@@ -64,7 +64,7 @@ public class AIDirectorScript : MonoBehaviour
 
         public void Execute(int index)
         {
-            output[index] = playerPos - allMobs[index].Position ;
+            output[index] = playerPos - allMobs[index].Position;
         }
     }
 
@@ -76,7 +76,8 @@ public class AIDirectorScript : MonoBehaviour
 
         for (int i = 0; i < mobCount; i++)
         {
-            var pos = new Vector3() {
+            var pos = new Vector3()
+            {
                 x = Random.Range(-8f, 8f),
                 y = Random.Range(-5f, 5f)
             };
@@ -112,7 +113,11 @@ public class AIDirectorScript : MonoBehaviour
         {
             GameObject mob = allMobs[i];
             mob.GetComponent<Rigidbody2D>().AddForce(moveToPlayerOutput[i]);
+            var data = allMobData[i];
+            data.Position = mob.transform.position;
+            allMobData[i] = data;
         }
+
         moveToPlayerOutput.Dispose();
     }
 

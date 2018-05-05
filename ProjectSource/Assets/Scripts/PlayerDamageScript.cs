@@ -2,25 +2,25 @@
 
 public class PlayerDamageScript : MonoBehaviour
 {
-    [SerializeField] private int _startingHealth;
+    [SerializeField] private int _initialSheilds;
     [SerializeField] private int _damagePerHit;
     [SerializeField] private float _sheildRegenDelayTime;
     [SerializeField] private float _sheildRegenIterationTime;
     [SerializeField] private int _sheildRegenIterationAmount;
 
-    private int _health;
+    private int _sheildHealth;
     private MainCanvasScript _mainCanvasScript;
 
     private void Awake()
     {
         _mainCanvasScript = GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<MainCanvasScript>();
-        _health = _startingHealth;
+        _sheildHealth = _initialSheilds;
     }
 
     public void TakeDamage(int damage)
     {
-        _health = Mathf.Max(_health - damage, 0);
-        float healthPercentage = (float)_health / _startingHealth;
+        _sheildHealth = Mathf.Max(_sheildHealth - damage, 0);
+        float healthPercentage = (float)_sheildHealth / _initialSheilds;
         _mainCanvasScript.SetHealthPercentage(healthPercentage);
 
         CancelInvoke();
@@ -37,11 +37,11 @@ public class PlayerDamageScript : MonoBehaviour
 
     private void RegenerateSheilds()
     {
-        _health = Mathf.Min(_health + _sheildRegenIterationAmount, _startingHealth);
-        float healthPercentage = (float)_health / _startingHealth;
+        _sheildHealth = Mathf.Min(_sheildHealth + _sheildRegenIterationAmount, _initialSheilds);
+        float healthPercentage = (float)_sheildHealth / _initialSheilds;
         _mainCanvasScript.SetHealthPercentage(healthPercentage);
 
-        if (_health == _startingHealth)
+        if (_sheildHealth == _initialSheilds)
         {
             CancelInvoke();
         }

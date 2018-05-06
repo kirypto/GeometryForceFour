@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainCanvasScript : MonoBehaviour
@@ -7,6 +8,7 @@ public class MainCanvasScript : MonoBehaviour
     private int _timer;
     private Text _timerText;
     private Text _fpsText;
+    private Text _youLoseText;
 
     private Transform _healthBarTransform;
     private int _frameCount;
@@ -18,6 +20,7 @@ public class MainCanvasScript : MonoBehaviour
         _timerText = transform.Find("Timer").GetComponent<Text>();
         _healthBarTransform = transform.Find("HealthBarForeground").transform;
         _fpsText = transform.Find("FPS").GetComponent<Text>();
+        _youLoseText = transform.Find("YouLoseText").GetComponent<Text>();
 
         InvokeRepeating(nameof(UpdateTime), 1f, 1f);
     }
@@ -48,6 +51,11 @@ public class MainCanvasScript : MonoBehaviour
                                                   $"but was {healthPercentage}.");
         }
 
+        if (healthPercentage < 0.01f)
+        {
+            PlayerDied();
+        }
+
         _healthBarTransform.localScale = new Vector3(healthPercentage, 1f, 1f);
     }
 
@@ -55,5 +63,17 @@ public class MainCanvasScript : MonoBehaviour
     {
         _timer++;
         _timerText.text = $"{_timer}";
+    }
+
+    private void PlayerDied()
+    {
+        _youLoseText.enabled = true;
+        Invoke("RestartGame", 3f);
+
+    }
+
+    private void RestartGame()
+    {
+        SceneManager.LoadScene(0);
     }
 }

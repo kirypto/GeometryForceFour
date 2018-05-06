@@ -119,6 +119,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ShouldBlink: 0
+  _xPosMax: 35
+  _xPosMin: -35
+  _yPosMax: 35
+  _yPosMin: -35
+  _reboundForce: 1
 --- !u!212 &212767394772527348
 SpriteRenderer:
   m_ObjectHideFlags: 1

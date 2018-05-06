@@ -7,6 +7,7 @@ TagManager:
   - Mobs
   - WeaponCone
   - MainCanvas
+  - Totem
   layers:
   - Default
   - TransparentFX
@@ -27,7 +28,7 @@ TagManager:
   - WeaponCone
   - 
   - 
-  - 
+  - Totem
   - 
   - 
   - 
@@ -44,12 +45,18 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
-  - name: Player
-    uniqueID: 109558369
+  - name: Background
+    uniqueID: 883477691
+    locked: 0
+  - name: WeaponCone
+    uniqueID: 43374081
     locked: 0
   - name: Mob
     uniqueID: 758416341
     locked: 0
-  - name: WeaponCone
-    uniqueID: 43374081
+  - name: Totem
+    uniqueID: 1509050523
+    locked: 0
+  - name: Player
+    uniqueID: 109558369
     locked: 0

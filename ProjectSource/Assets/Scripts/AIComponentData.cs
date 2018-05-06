@@ -5,13 +5,8 @@ public struct MobComponentData
     public Vector3 Position;
     public Vector3 Velocity;
 }
-      
 
-public struct CenterMassJobInput
-{
-    // target center of group
-    public float GroupCenterMassScale;
-}
+
 public struct CenterMassJobOutput
 {
     // target center of group
@@ -19,12 +14,6 @@ public struct CenterMassJobOutput
 }
 
 
-public struct EqualizeSpeedJobInput
-{
-    // match speed
-    public float EqualizeSpeedScale;
-    public float EqualizeSpeedRadius;
-}
 public struct EqualizeSpeedJobOutput
 {
     // match speed
@@ -32,12 +21,6 @@ public struct EqualizeSpeedJobOutput
 }
 
 
-public struct PersonalSpaceJobInput
-{
-    // personal space
-    public float PersonalSpaceScale;
-    public float PersonalSpaceRadius;
-}
 public struct PersonalSpaceJobOutput
 {
     // personal space

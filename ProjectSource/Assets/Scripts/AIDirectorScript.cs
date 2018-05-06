@@ -24,11 +24,8 @@ public class AIDirectorScript : MonoBehaviour
 
     private GameObject[] allMobs;
     private NativeArray<MobComponentData> allMobData;
-    private NativeArray<CenterMassJobInput> centerMassInputs;
     private NativeArray<CenterMassJobOutput> centerMassOutputs;
-    private NativeArray<EqualizeSpeedJobInput> equalizeSpeedInputs;
     private NativeArray<EqualizeSpeedJobOutput> equalizeSpeedOutputs;
-    private NativeArray<PersonalSpaceJobInput> personalSpaceInputs;
     private NativeArray<PersonalSpaceJobOutput> personalSpaceOutputs;
 
     private NativeArray<Vector3> moveToPlayerOutput;
@@ -37,7 +34,7 @@ public class AIDirectorScript : MonoBehaviour
 
     struct CenterMassJob : IJobParallelFor
     {
-        [ReadOnly] public NativeArray<CenterMassJobInput> input;
+        [ReadOnly] public float scaler;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
         [ReadOnly] public NativeArray<MobComponentData> friends;
 
@@ -57,14 +54,15 @@ public class AIDirectorScript : MonoBehaviour
             output[index] = new CenterMassJobOutput()
             {
                 GroupCenterMass = ((center - allMobs[index].Position) / 100f) *
-                                  input[index].GroupCenterMassScale
+                                  scaler
             };
         }
     }
 
     struct PersonalSpaceJob : IJobParallelFor
     {
-        [ReadOnly] public NativeArray<PersonalSpaceJobInput> input;
+        [ReadOnly] public float scaler;
+        [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
         [ReadOnly] public NativeArray<MobComponentData> friends;
 
@@ -78,7 +76,7 @@ public class AIDirectorScript : MonoBehaviour
             {
                 float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
 
-                if (dist > 0 && dist < input[index].PersonalSpaceRadius)
+                if (dist > 0 && dist < radius)
                 {
                     Vector3 diff = Vector3.Normalize(allMobs[index].Position - friends[i].Position);
                     diff = diff / dist;
@@ -89,14 +87,15 @@ public class AIDirectorScript : MonoBehaviour
 
             output[index] = new PersonalSpaceJobOutput()
             {
-                PersonalSpace = avoidance * input[index].PersonalSpaceScale
+                PersonalSpace = avoidance * scaler
             };
         }
     }
 
     struct EqualizeSpeedJob : IJobParallelFor
-    {
-        [ReadOnly] public NativeArray<EqualizeSpeedJobInput> input;
+    {        
+        [ReadOnly] public float scaler;
+        [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
         [ReadOnly] public NativeArray<MobComponentData> friends;
 
@@ -110,7 +109,7 @@ public class AIDirectorScript : MonoBehaviour
             {
                 float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
 
-                if (dist < input[index].EqualizeSpeedRadius)
+                if (dist < radius)
                 {
                     perceivedVelocity += friends[i].Velocity;
                 }
@@ -120,7 +119,7 @@ public class AIDirectorScript : MonoBehaviour
 
             output[index] = new EqualizeSpeedJobOutput()
             {
-                EqualizeSpeed = ((perceivedVelocity - allMobs[index].Velocity) / 8f) * input[index].EqualizeSpeedScale
+                EqualizeSpeed = ((perceivedVelocity - allMobs[index].Velocity) / 8f) * scaler
             };
         }
     }
@@ -149,24 +148,10 @@ public class AIDirectorScript : MonoBehaviour
         moveToPlayerOutput = new NativeArray<Vector3>(mobCount, Allocator.Persistent);
 
         centerMassOutputs = new NativeArray<CenterMassJobOutput>(mobCount, Allocator.Persistent);
-        centerMassInputs = GetPrepopArray(new CenterMassJobInput()
-        {
-            GroupCenterMassScale = StdCenterMassScaler
-        });
 
         personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
-        personalSpaceInputs = GetPrepopArray(new PersonalSpaceJobInput()
-        {
-            PersonalSpaceRadius = personalSpaceRadius,
-            PersonalSpaceScale = stdPersonalSpaceScaler
-        });
 
         equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
-        equalizeSpeedInputs = GetPrepopArray(new EqualizeSpeedJobInput()
-        {
-            EqualizeSpeedRadius = equalizeSpeedRadius,
-            EqualizeSpeedScale = stdEqualizeSpeedScaler
-        });
 
         SpawnMobs();
     }
@@ -212,7 +197,7 @@ public class AIDirectorScript : MonoBehaviour
         {
             allMobs = allMobData,
             friends = allMobData,
-            input = centerMassInputs,
+            scaler = StdCenterMassScaler,
             output = centerMassOutputs
         };
         JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64);
@@ -222,7 +207,8 @@ public class AIDirectorScript : MonoBehaviour
         {
             allMobs = allMobData,
             friends = allMobData,
-            input = personalSpaceInputs,
+            scaler = stdPersonalSpaceScaler,
+            radius = personalSpaceRadius,
             output = personalSpaceOutputs
         };
         JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64);
@@ -232,7 +218,8 @@ public class AIDirectorScript : MonoBehaviour
         {
             allMobs = allMobData,
             friends = allMobData,
-            input = equalizeSpeedInputs,
+            scaler = stdEqualizeSpeedScaler,
+            radius = equalizeSpeedRadius,
             output = equalizeSpeedOutputs
         };
         JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64);
@@ -266,13 +253,10 @@ public class AIDirectorScript : MonoBehaviour
         allMobData.Dispose();
         moveToPlayerOutput.Dispose();
 
-        centerMassInputs.Dispose();
         centerMassOutputs.Dispose();
 
-        personalSpaceInputs.Dispose();
         personalSpaceOutputs.Dispose();
 
-        equalizeSpeedInputs.Dispose();
         equalizeSpeedOutputs.Dispose();
     }
 

@@ -51,19 +51,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2c96162412c9f409fc4210ff7d50fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobCount: 600
+  mobCount: 750
   mobPrefab: {fileID: 1107635731108616, guid: 681aa31864f4dec4ea6d080a00259b0b, type: 2}
   maxMobSpeed: 8
+  jobSystemBatchSize: 64
   findFriendRadius: 5
   moveToPlayerScaler: 1
   targetPlayerInnerRadius: 5
   targetPlayerOutterRadius: 30
   CenterMassToggle: 1
-  StdCenterMassScaler: 30
+  StdCenterMassScaler: 5
   EqualizeSpeedToggle: 1
   equalizeSpeedRadius: 5
   stdEqualizeSpeedScaler: 2.5
   PersonalSpaceToggle: 1
   personalSpaceRadius: 1.5
   stdPersonalSpaceScaler: 3
-  _updateFriendBatchSize: 25
+  _updateFriendBatchSize: 75
+  _updateFriendsCoroutineIterationTime: 0.15

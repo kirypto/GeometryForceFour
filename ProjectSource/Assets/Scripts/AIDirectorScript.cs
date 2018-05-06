@@ -28,6 +28,7 @@ public class AIDirectorScript : MonoBehaviour
     [SerializeField] private float stdPersonalSpaceScaler = 1f;
 
     [SerializeField] private int _updateFriendBatchSize = 5;
+    [SerializeField] private float _updateFriendsCoroutineIterationTime = 0.1f;
 
 
     private GameObject[] allMobs;
@@ -298,7 +299,7 @@ public class AIDirectorScript : MonoBehaviour
             return;
         }
 
-            _moveToPlayerJobHandle.Complete();
+        _moveToPlayerJobHandle.Complete();
         _centerMassJobHandle.Complete();
         _personalSpaceJobHandle.Complete();
         _equalizeSpeedJobHandle.Complete();
@@ -414,18 +415,35 @@ public class AIDirectorScript : MonoBehaviour
         {
             for (int currentMobIndex = 0; currentMobIndex < mobCount; currentMobIndex++)
             {
-                if (_centerMassJobHandle.IsCompleted)
-                {
+//                while (!_centerMassJobHandle.IsCompleted)
+//                {
+//                    print($"Center mass job not done, waiting: {_centerMassJobHandle.IsCompleted}");
+//                    yield return new WaitWhile(() => _centerMassJobHandle.IsCompleted);
+//                    print($"Should be done now: {_centerMassJobHandle.IsCompleted}");
+//                }
+//                print($"Updating Friends, center mass status: {_centerMassJobHandle.IsCompleted}");
+//                _moveToPlayerJobHandle.Complete();
 
-                }
+//                yield return new WaitUntil(() =>
+//                {
+//                    print($"Waiting: {_centerMassJobHandle.IsCompleted}, {_personalSpaceJobHandle.IsCompleted}, " +
+//                          $" {_equalizeSpeedJobHandle.IsCompleted}");
+//                    return _centerMassJobHandle.IsCompleted
+//                           && _personalSpaceJobHandle.IsCompleted
+//                           && _equalizeSpeedJobHandle.IsCompleted;
+//                });
+//                print("Updating...");
+                _centerMassJobHandle.Complete();
+                _personalSpaceJobHandle.Complete();
+                _equalizeSpeedJobHandle.Complete();
                 UpdateFriends(currentMobIndex);
 
-                print("Updating friends");
                 if (numberUpdated >= _updateFriendBatchSize)
                 {
                     numberUpdated = 0;
 //                    yield return new WaitForSeconds(1f);
-                    yield return new WaitForEndOfFrame();
+                    yield return new WaitForSeconds(_updateFriendsCoroutineIterationTime);
+//                    yield return new WaitForEndOfFrame();
                 }
                 else
                 {
@@ -439,6 +457,7 @@ public class AIDirectorScript : MonoBehaviour
 
     private void UpdateFriends(int currentMobIndex)
     {
+//        _centerMassJobHandle.Complete();
         mobFriends.Remove(currentMobIndex);
 //        _friendDictionary[currentMobIndex].Clear();
         for (int otherMobIndex = 0; otherMobIndex < mobCount; otherMobIndex++)

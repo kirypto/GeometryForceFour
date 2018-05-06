@@ -7,6 +7,7 @@ public class AIDirectorScript : MonoBehaviour
 {
     [SerializeField] private int mobCount = 100;
     [SerializeField] private GameObject mobPrefab;
+    [SerializeField] private float findFriendRadius = 5f;
 
     [SerializeField] private float moveToPlayerScaler = 1f;
 
@@ -38,7 +39,7 @@ public class AIDirectorScript : MonoBehaviour
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
 
         public NativeMultiHashMap<int, MobComponentData> output;
-        
+
         public void Execute()
         {
             output.Clear();
@@ -139,6 +140,7 @@ public class AIDirectorScript : MonoBehaviour
                     diff = diff / dist;
                     avoidance += diff;
                 }
+
                 success = friends.TryGetNextValue(out currentFrienData, ref frienderator);
             }
 
@@ -151,7 +153,7 @@ public class AIDirectorScript : MonoBehaviour
     }
 
     struct EqualizeSpeedJob : IJobParallelFor
-    {        
+    {
         [ReadOnly] public float scaler;
         [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
@@ -177,6 +179,7 @@ public class AIDirectorScript : MonoBehaviour
                 {
                     perceivedVelocity += currentFrienData.Velocity;
                 }
+
                 success = friends.TryGetNextValue(out currentFrienData, ref frienderator);
             }
 
@@ -199,7 +202,11 @@ public class AIDirectorScript : MonoBehaviour
 
         public void Execute(int index)
         {
-            output[index] = (playerPos - allMobs[index].Position) * scaler;
+            float dist = Vector3.Distance(playerPos, allMobs[index].Position);
+            if (dist < 5f || dist > 30f)
+            {
+                output[index] = (playerPos - allMobs[index].Position) * scaler;
+            }
         }
     }
 
@@ -217,7 +224,7 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
 
         equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
-        
+
         mobFriends = new NativeMultiHashMap<int, MobComponentData>(mobCount, Allocator.Persistent);
 
         SpawnMobs();
@@ -249,7 +256,7 @@ public class AIDirectorScript : MonoBehaviour
         FindFriendsJob findFriendsJob = new FindFriendsJob()
         {
             allMobs = allMobData,
-            radius = 5f,
+            radius = findFriendRadius,
             output = mobFriends
         };
         JobHandle findFriendsJobHandle = findFriendsJob.Schedule();
@@ -334,7 +341,7 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs.Dispose();
 
         equalizeSpeedOutputs.Dispose();
-        
+
         mobFriends.Dispose();
     }
 

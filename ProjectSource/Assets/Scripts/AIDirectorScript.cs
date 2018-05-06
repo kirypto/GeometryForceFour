@@ -155,7 +155,7 @@ public class AIDirectorScript : MonoBehaviour
         [ReadOnly] public float scaler;
         [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
-        [ReadOnly] public NativeArray<MobComponentData> friends;
+        [ReadOnly] public NativeMultiHashMap<int, MobComponentData> friends;
 
         public NativeArray<EqualizeSpeedJobOutput> output;
 
@@ -163,17 +163,24 @@ public class AIDirectorScript : MonoBehaviour
         {
             Vector3 perceivedVelocity = Vector3.zero;
 
-            for (int i = 0; i < friends.Length; i++)
+            int friendCount = 0;
+            MobComponentData currentFrienData;
+            NativeMultiHashMapIterator<int> frienderator = new NativeMultiHashMapIterator<int>();
+            bool success = friends.TryGetFirstValue(index, out currentFrienData, out frienderator);
+
+            while (success)
             {
-                float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
+                friendCount++;
+                float dist = Vector3.Distance(allMobs[index].Position, currentFrienData.Position);
 
                 if (dist < radius)
                 {
-                    perceivedVelocity += friends[i].Velocity;
+                    perceivedVelocity += currentFrienData.Velocity;
                 }
+                success = friends.TryGetNextValue(out currentFrienData, ref frienderator);
             }
 
-            perceivedVelocity = (friends.Length > 1) ? perceivedVelocity / (friends.Length) : perceivedVelocity;
+            perceivedVelocity = (friendCount > 1) ? perceivedVelocity / (friendCount) : perceivedVelocity;
 
             output[index] = new EqualizeSpeedJobOutput()
             {
@@ -285,7 +292,7 @@ public class AIDirectorScript : MonoBehaviour
         EqualizeSpeedJob equalizeSpeedJob = new EqualizeSpeedJob()
         {
             allMobs = allMobData,
-            friends = allMobData,
+            friends = mobFriends,
             scaler = stdEqualizeSpeedScaler,
             radius = equalizeSpeedRadius,
             output = equalizeSpeedOutputs

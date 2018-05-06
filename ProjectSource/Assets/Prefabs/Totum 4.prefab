@@ -26,7 +26,7 @@ GameObject:
   - component: {fileID: 50926276353398130}
   m_Layer: 19
   m_Name: Totum 4
-  m_TagString: Untagged
+  m_TagString: Totem
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

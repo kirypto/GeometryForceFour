@@ -1,7 +1,14 @@
 fileFormatVersion: 2
 guid: 886b1d9372efff74c9384177d762b817
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: Totom2BlinkSS_0
+    21300002: Totom2BlinkSS_1
+    21300004: Totom2BlinkSS_2
+    21300006: Totom2BlinkSS_3
+    21300008: Totom2BlinkSS_4
+    21300010: Totom2BlinkSS_5
+    21300012: Totom2BlinkSS_6
   externalObjects: {}
   serializedVersion: 5
   mipmaps:
@@ -38,7 +45,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -67,13 +74,164 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
     androidETC2FallbackOverride: 0
+  - serializedVersion: 2
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: Totom2BlinkSS_0
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f48b49fb5b238e349b35b70e885784f6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_1
+      rect:
+        serializedVersion: 2
+        x: 264
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bdc7d2dd046f0324bbbeb50ded634cca
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_2
+      rect:
+        serializedVersion: 2
+        x: 520
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e6bb70a6754b7244dbd6cbd36467d6c8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_3
+      rect:
+        serializedVersion: 2
+        x: 776
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e822f737da6c9044ab579e7e482b1329
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_4
+      rect:
+        serializedVersion: 2
+        x: 1032
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bd64735ec67f5244f85e7adb2be887f6
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_5
+      rect:
+        serializedVersion: 2
+        x: 1288
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff06a49f9ce0913489ecdd604658b9c8
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Totom2BlinkSS_6
+      rect:
+        serializedVersion: 2
+        x: 1544
+        y: 11
+        width: 240
+        height: 237
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dd4a0d84893ecc42b8cba91ac701a9e
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
-    spriteID: d0e1ee310feff8b428ff57e2ff624547
+    spriteID: 702454f99db1f1e47821625fedb32d1e
     vertices: []
     indices: 
     edges: []

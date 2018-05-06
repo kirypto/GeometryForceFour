@@ -82,7 +82,7 @@ public class AIDirectorScript : MonoBehaviour
     {
         [ReadOnly] public float scaler;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
-        [ReadOnly] public NativeArray<MobComponentData> friends;
+        [ReadOnly] public NativeMultiHashMap<int, MobComponentData> friends;
 
         public NativeArray<CenterMassJobOutput> output;
 
@@ -90,12 +90,19 @@ public class AIDirectorScript : MonoBehaviour
         {
             Vector3 center = Vector3.zero;
 
-            for (int i = 0; i < friends.Length; i++)
+            int friendCount = 0;
+            MobComponentData currentFrienData;
+            NativeMultiHashMapIterator<int> frienderator = new NativeMultiHashMapIterator<int>();
+            bool success = friends.TryGetFirstValue(index, out currentFrienData, out frienderator);
+
+            while (success)
             {
-                center += friends[i].Position;
+                friendCount++;
+                center += currentFrienData.Position;
+                success = friends.TryGetNextValue(out currentFrienData, ref frienderator);
             }
 
-            center = (friends.Length > 1) ? center / (friends.Length) : center;
+            center = (friendCount > 1) ? center / (friendCount) : center;
 
             output[index] = new CenterMassJobOutput()
             {
@@ -252,7 +259,7 @@ public class AIDirectorScript : MonoBehaviour
         CenterMassJob centerMassJob = new CenterMassJob()
         {
             allMobs = allMobData,
-            friends = allMobData,
+            friends = mobFriends,
             scaler = StdCenterMassScaler,
             output = centerMassOutputs
         };

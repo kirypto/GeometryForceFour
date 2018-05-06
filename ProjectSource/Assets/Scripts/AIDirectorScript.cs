@@ -117,7 +117,7 @@ public class AIDirectorScript : MonoBehaviour
         [ReadOnly] public float scaler;
         [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
-        [ReadOnly] public NativeArray<MobComponentData> friends;
+        [ReadOnly] public NativeMultiHashMap<int, MobComponentData> friends;
 
         public NativeArray<PersonalSpaceJobOutput> output;
 
@@ -125,16 +125,21 @@ public class AIDirectorScript : MonoBehaviour
         {
             Vector3 avoidance = Vector3.zero;
 
-            for (int i = 0; i < friends.Length; i++)
+            MobComponentData currentFrienData;
+            NativeMultiHashMapIterator<int> frienderator = new NativeMultiHashMapIterator<int>();
+            bool success = friends.TryGetFirstValue(index, out currentFrienData, out frienderator);
+
+            while (success)
             {
-                float dist = Vector3.Distance(allMobs[index].Position, friends[i].Position);
+                float dist = Vector3.Distance(allMobs[index].Position, currentFrienData.Position);
 
                 if (dist > 0 && dist < radius)
                 {
-                    Vector3 diff = Vector3.Normalize(allMobs[index].Position - friends[i].Position);
+                    Vector3 diff = Vector3.Normalize(allMobs[index].Position - currentFrienData.Position);
                     diff = diff / dist;
                     avoidance += diff;
                 }
+                success = friends.TryGetNextValue(out currentFrienData, ref frienderator);
             }
 
 
@@ -269,7 +274,7 @@ public class AIDirectorScript : MonoBehaviour
         PersonalSpaceJob personalSpaceJob = new PersonalSpaceJob()
         {
             allMobs = allMobData,
-            friends = allMobData,
+            friends = mobFriends,
             scaler = stdPersonalSpaceScaler,
             radius = personalSpaceRadius,
             output = personalSpaceOutputs

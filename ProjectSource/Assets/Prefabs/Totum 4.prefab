@@ -23,7 +23,7 @@ GameObject:
   - component: {fileID: 95760565658037150}
   - component: {fileID: 61058777182384544}
   - component: {fileID: 114284217772379562}
-  m_Layer: 0
+  m_Layer: 19
   m_Name: Totum 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -121,8 +121,8 @@ public class AIDirectorScript : MonoBehaviour
 
             output[index] = new CenterMassJobOutput()
             {
-                    GroupCenterMass = ((center - allMobs[index].Position) / 100f) *
-                                      scaler
+                GroupCenterMass = ((center - allMobs[index].Position) / 100f) *
+                                  scaler
             };
         }
     }
@@ -161,7 +161,7 @@ public class AIDirectorScript : MonoBehaviour
 
             output[index] = new PersonalSpaceJobOutput()
             {
-                    PersonalSpace = avoidance * scaler
+                PersonalSpace = avoidance * scaler
             };
         }
     }
@@ -201,7 +201,7 @@ public class AIDirectorScript : MonoBehaviour
 
             output[index] = new EqualizeSpeedJobOutput()
             {
-                    EqualizeSpeed = ((perceivedVelocity - allMobs[index].Velocity) / 8f) * scaler
+                EqualizeSpeed = ((perceivedVelocity - allMobs[index].Velocity) / 8f) * scaler
             };
         }
     }
@@ -261,16 +261,21 @@ public class AIDirectorScript : MonoBehaviour
         {
             var pos = new Vector3()
             {
-                    x = Random.Range(-8f, 8f),
-                    y = Random.Range(-5f, 5f)
+                x = Random.Range(-8f, 8f),
+                y = Random.Range(-5f, 5f)
             };
 
             var mob = Instantiate(mobPrefab, pos, Quaternion.identity);
+            if (i < 50)
+            {
+                mob.GetComponent<AudioSource>().Play();
+            }
+
             allMobs[i] = mob;
             var mobData = new MobComponentData()
             {
-                    Position = mob.transform.position,
-                    Velocity = Vector3.zero
+                Position = mob.transform.position,
+                Velocity = Vector3.zero
             };
             allMobData[i] = mobData;
         }
@@ -293,7 +298,8 @@ public class AIDirectorScript : MonoBehaviour
 //                mobFriends.Add(index, mobComponentData);
 //            }
 //        }
-        if (!_moveToPlayerJobHandle.IsCompleted || !_centerMassJobHandle.IsCompleted || !_personalSpaceJobHandle.IsCompleted ||
+        if (!_moveToPlayerJobHandle.IsCompleted || !_centerMassJobHandle.IsCompleted ||
+            !_personalSpaceJobHandle.IsCompleted ||
             !_equalizeSpeedJobHandle.IsCompleted)
         {
             return;
@@ -327,12 +333,12 @@ public class AIDirectorScript : MonoBehaviour
 
         var moveToPlayerJob = new MoveToPlayerJob()
         {
-                allMobs = allMobData,
-                playerPos = playerPos,
-                targetPlayerInnerRadius = targetPlayerInnerRadius,
-                targetPlayerOutterRadius = targetPlayerOutterRadius,
-                scaler = moveToPlayerScaler,
-                output = moveToPlayerOutput
+            allMobs = allMobData,
+            playerPos = playerPos,
+            targetPlayerInnerRadius = targetPlayerInnerRadius,
+            targetPlayerOutterRadius = targetPlayerOutterRadius,
+            scaler = moveToPlayerScaler,
+            output = moveToPlayerOutput
         };
 
         _moveToPlayerJobHandle = moveToPlayerJob.Schedule(mobCount, jobSystemBatchSize);
@@ -340,10 +346,10 @@ public class AIDirectorScript : MonoBehaviour
 
         CenterMassJob centerMassJob = new CenterMassJob()
         {
-                allMobs = allMobData,
-                friends = mobFriends,
-                scaler = StdCenterMassScaler,
-                output = centerMassOutputs
+            allMobs = allMobData,
+            friends = mobFriends,
+            scaler = StdCenterMassScaler,
+            output = centerMassOutputs
         };
         _centerMassJobHandle = centerMassJob.Schedule(mobCount, jobSystemBatchSize);
 //        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
@@ -351,11 +357,11 @@ public class AIDirectorScript : MonoBehaviour
 
         PersonalSpaceJob personalSpaceJob = new PersonalSpaceJob()
         {
-                allMobs = allMobData,
-                friends = mobFriends,
-                scaler = stdPersonalSpaceScaler,
-                radius = personalSpaceRadius,
-                output = personalSpaceOutputs
+            allMobs = allMobData,
+            friends = mobFriends,
+            scaler = stdPersonalSpaceScaler,
+            radius = personalSpaceRadius,
+            output = personalSpaceOutputs
         };
         _personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, jobSystemBatchSize);
 //        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
@@ -363,11 +369,11 @@ public class AIDirectorScript : MonoBehaviour
 
         EqualizeSpeedJob equalizeSpeedJob = new EqualizeSpeedJob()
         {
-                allMobs = allMobData,
-                friends = mobFriends,
-                scaler = stdEqualizeSpeedScaler,
-                radius = equalizeSpeedRadius,
-                output = equalizeSpeedOutputs
+            allMobs = allMobData,
+            friends = mobFriends,
+            scaler = stdEqualizeSpeedScaler,
+            radius = equalizeSpeedRadius,
+            output = equalizeSpeedOutputs
         };
         _equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, jobSystemBatchSize);
 //        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
@@ -444,8 +450,7 @@ public class AIDirectorScript : MonoBehaviour
 //                    yield return new WaitForSeconds(1f);
                     yield return new WaitForSeconds(_updateFriendsCoroutineIterationTime);
 //                    yield return new WaitForEndOfFrame();
-                }
-                else
+                } else
                 {
                     numberUpdated++;
                 }

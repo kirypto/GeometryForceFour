@@ -267,7 +267,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _enemyScanIterationTime: 0.2
   _damagePerHit: 5
-  _mobTeleportDistance: 4
+  _mobTeleportDistance: 0
 --- !u!114 &114748884908734108
 MonoBehaviour:
   m_ObjectHideFlags: 1

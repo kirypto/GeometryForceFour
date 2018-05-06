@@ -55,7 +55,7 @@ MonoBehaviour:
   mobPrefab: {fileID: 1107635731108616, guid: 681aa31864f4dec4ea6d080a00259b0b, type: 2}
   maxMobSpeed: 15
   jobSystemBatchSize: 64
-  findFriendRadius: 5
+  findFriendRadius: 10
   moveToPlayerScaler: 1.2
   targetPlayerInnerRadius: 10
   targetPlayerOutterRadius: 30

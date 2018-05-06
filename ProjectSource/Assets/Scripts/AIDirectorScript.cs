@@ -260,7 +260,6 @@ public class AIDirectorScript : MonoBehaviour
             output = mobFriends
         };
         JobHandle findFriendsJobHandle = findFriendsJob.Schedule();
-        findFriendsJobHandle.Complete(); // complete now to service other jobs
 
         Vector3 playerPos = playerTransform.position;
 
@@ -272,7 +271,7 @@ public class AIDirectorScript : MonoBehaviour
             output = moveToPlayerOutput
         };
 
-        JobHandle jobHandle = moveToPlayerJob.Schedule(mobCount, 64);
+        JobHandle moveToPlayerJobHandle = moveToPlayerJob.Schedule(mobCount, 64);
 
 
         CenterMassJob centerMassJob = new CenterMassJob()
@@ -282,7 +281,7 @@ public class AIDirectorScript : MonoBehaviour
             scaler = StdCenterMassScaler,
             output = centerMassOutputs
         };
-        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64);
+        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64, findFriendsJobHandle);
 
 
         PersonalSpaceJob personalSpaceJob = new PersonalSpaceJob()
@@ -293,7 +292,7 @@ public class AIDirectorScript : MonoBehaviour
             radius = personalSpaceRadius,
             output = personalSpaceOutputs
         };
-        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64);
+        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64, findFriendsJobHandle);
 
 
         EqualizeSpeedJob equalizeSpeedJob = new EqualizeSpeedJob()
@@ -304,11 +303,9 @@ public class AIDirectorScript : MonoBehaviour
             radius = equalizeSpeedRadius,
             output = equalizeSpeedOutputs
         };
-        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64);
+        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64, findFriendsJobHandle);
 
-//        findFriendsJobHandle.Complete();
-
-        jobHandle.Complete();
+        moveToPlayerJobHandle.Complete();
         centerMassJobHandle.Complete();
         personalSpaceJobHandle.Complete();
         equalizeSpeedJobHandle.Complete();

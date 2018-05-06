@@ -10,6 +10,8 @@ public class AIDirectorScript : MonoBehaviour
     [SerializeField] private float findFriendRadius = 5f;
 
     [SerializeField] private float moveToPlayerScaler = 1f;
+    [SerializeField] public float targetPlayerInnerRadius = 5f;
+    [SerializeField] public float targetPlayerOutterRadius = 30f;
 
     [SerializeField] private bool CenterMassToggle = true;
     [SerializeField] private float StdCenterMassScaler = 1f;
@@ -197,13 +199,15 @@ public class AIDirectorScript : MonoBehaviour
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
         [ReadOnly] public Vector3 playerPos;
         [ReadOnly] public float scaler;
+        [ReadOnly] public float targetPlayerInnerRadius;
+        [ReadOnly] public float targetPlayerOutterRadius;
 
         public NativeArray<Vector3> output;
 
         public void Execute(int index)
         {
             float dist = Vector3.Distance(playerPos, allMobs[index].Position);
-            if (dist < 5f || dist > 30f)
+            if (dist < targetPlayerInnerRadius || dist > targetPlayerOutterRadius)
             {
                 output[index] = (playerPos - allMobs[index].Position) * scaler;
             }
@@ -267,6 +271,8 @@ public class AIDirectorScript : MonoBehaviour
         {
             allMobs = allMobData,
             playerPos = playerPos,
+            targetPlayerInnerRadius = targetPlayerInnerRadius,
+            targetPlayerOutterRadius = targetPlayerOutterRadius,
             scaler = moveToPlayerScaler,
             output = moveToPlayerOutput
         };
@@ -317,6 +323,8 @@ public class AIDirectorScript : MonoBehaviour
             data.Velocity += centerMassOutputs[i].GroupCenterMass;
             data.Velocity += personalSpaceOutputs[i].PersonalSpace;
             data.Velocity += equalizeSpeedOutputs[i].EqualizeSpeed;
+
+            data.Velocity = Vector3.ClampMagnitude(data.Velocity, 8f);
 
 
             GameObject mob = allMobs[i];

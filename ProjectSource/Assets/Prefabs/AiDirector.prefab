@@ -55,6 +55,8 @@ MonoBehaviour:
   mobPrefab: {fileID: 1107635731108616, guid: 681aa31864f4dec4ea6d080a00259b0b, type: 2}
   findFriendRadius: 5
   moveToPlayerScaler: 1
+  targetPlayerInnerRadius: 5
+  targetPlayerOutterRadius: 30
   CenterMassToggle: 1
   StdCenterMassScaler: 30
   EqualizeSpeedToggle: 1

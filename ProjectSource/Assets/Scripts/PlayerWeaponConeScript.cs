@@ -35,22 +35,28 @@ public class PlayerWeaponConeScript : MonoBehaviour
 
     private void FireGravityWeapon()
     {
-        ISet<Collider2D> mobsWithinWeaponCone = new HashSet<Collider2D>();
+        ISet<Collider2D> collidersWithinWeaponCone = new HashSet<Collider2D>();
         ContactFilter2D contactFilter2D = new ContactFilter2D
         {
                 useLayerMask = true,
-                layerMask = 1 << LayerMask.NameToLayer("Mobs")
+                layerMask = 1 << LayerMask.NameToLayer("Mobs") | 1 << LayerMask.NameToLayer("Totem")
         };
 
-        Utilities.ScanForOverlappedColliders(_triangleCollider, contactFilter2D, mobsWithinWeaponCone);
-        Utilities.ScanForOverlappedColliders(_ovalCollider, contactFilter2D, mobsWithinWeaponCone);
+        Utilities.ScanForOverlappedColliders(_triangleCollider, contactFilter2D, collidersWithinWeaponCone);
+        Utilities.ScanForOverlappedColliders(_ovalCollider, contactFilter2D, collidersWithinWeaponCone);
 
-        foreach (Collider2D mobCollider in mobsWithinWeaponCone)
+        foreach (Collider2D weaponTargetCollider in collidersWithinWeaponCone)
         {
-            Vector2 directionToMob = ((Vector2)(mobCollider.transform.position - transform.position)).normalized;
+            Vector2 directionToMob = ((Vector2)(weaponTargetCollider.transform.position - transform.position)).normalized;
 
             //TODO: Improve performance of this
-            mobCollider.GetComponentInParent<Rigidbody2D>().AddForce(directionToMob * _weaponForce);
+            Rigidbody2D rigidBodyToApplyForce = weaponTargetCollider.GetComponent<Rigidbody2D>();
+            if (rigidBodyToApplyForce == null)
+            {
+                rigidBodyToApplyForce = weaponTargetCollider.GetComponentInParent<Rigidbody2D>();
+            }
+
+            rigidBodyToApplyForce.AddForce(directionToMob * _weaponForce);
         }
     }
 

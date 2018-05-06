@@ -6,15 +6,33 @@ public class MainCanvasScript : MonoBehaviour
 {
     private int _timer;
     private Text _timerText;
+    private Text _fpsText;
 
     private Transform _healthBarTransform;
+    private int _frameCount;
+    private float _deltaTimeSum;
+    private float _fpsTextUpdateRate = 4f;
 
     private void Awake()
     {
         _timerText = transform.Find("Timer").GetComponent<Text>();
         _healthBarTransform = transform.Find("HealthBarForeground").transform;
+        _fpsText = transform.Find("FPS").GetComponent<Text>();
 
         InvokeRepeating(nameof(UpdateTime), 1f, 1f);
+    }
+
+    private void Update()
+    {
+        _frameCount++;
+        _deltaTimeSum += Time.deltaTime;
+        if (_deltaTimeSum > 1f / _fpsTextUpdateRate)
+        {
+            int fps = Mathf.FloorToInt(_frameCount / _deltaTimeSum);
+            _fpsText.text = $"{fps}";
+            _frameCount = 0;
+            _deltaTimeSum -= 1f / _fpsTextUpdateRate;
+        }
     }
 
     public void SetHealthPercentage(float healthPercentage)

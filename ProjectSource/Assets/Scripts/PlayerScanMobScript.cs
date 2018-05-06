@@ -36,7 +36,6 @@ public class PlayerScanMobScript : MonoBehaviour
         }
 
         int playerDamage = _damagePerHit * mobsWithinMobScanCollider.Count;
-        print(playerDamage);
         _playerDamageScript.TakeDamage(playerDamage);
 
         foreach (Collider2D mobCollider in mobsWithinMobScanCollider)

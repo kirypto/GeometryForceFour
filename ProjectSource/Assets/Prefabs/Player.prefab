@@ -72,6 +72,7 @@ GameObject:
   - component: {fileID: 50525179202624912}
   - component: {fileID: 58147843676110484}
   - component: {fileID: 58175133081545206}
+  - component: {fileID: 81559237459558204}
   - component: {fileID: 114010949852073760}
   - component: {fileID: 114082580519314054}
   - component: {fileID: 114748884908734108}
@@ -230,6 +231,13 @@ CapsuleCollider2D:
   m_Offset: {x: -0.011227876, y: -0.0017790198}
   m_Size: {x: 0.32754427, y: 0.9750942}
   m_Direction: 0
+--- !u!81 &81559237459558204
+AudioListener:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529518770281376}
+  m_Enabled: 1
 --- !u!114 &114010949852073760
 MonoBehaviour:
   m_ObjectHideFlags: 1

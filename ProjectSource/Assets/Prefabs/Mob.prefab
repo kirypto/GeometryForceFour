@@ -20,7 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4711028253095326}
   - component: {fileID: 50448764867846374}
-  - component: {fileID: 82108795384481952}
+  - component: {fileID: 82117078580523932}
   m_Layer: 13
   m_Name: Mob
   m_TagString: Mobs
@@ -107,7 +107,7 @@ CircleCollider2D:
   m_Offset: {x: -0.15, y: 0}
   serializedVersion: 2
   m_Radius: 0.3
---- !u!82 &82108795384481952
+--- !u!82 &82117078580523932
 AudioSource:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

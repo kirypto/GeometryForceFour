@@ -176,6 +176,7 @@ public class AIDirectorScript : MonoBehaviour
 
         equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
         
+        mobFriends = new NativeMultiHashMap<int, MobComponentData>(mobCount, Allocator.Persistent);
 //        mobFriends = new NativeArray<NativeList<MobComponentData>>(mobCount, Allocator.Persistent);
 //        for (int i = 0; i < mobFriends.Length; i++)
 //        {
@@ -296,6 +297,7 @@ public class AIDirectorScript : MonoBehaviour
 
         equalizeSpeedOutputs.Dispose();
         
+        mobFriends.Dispose();
 //        foreach (var frnd in mobFriends) {            
 //            frnd.Dispose();
 //        }

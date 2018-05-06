@@ -71,9 +71,11 @@ GameObject:
   - component: {fileID: 212253924741512768}
   - component: {fileID: 50525179202624912}
   - component: {fileID: 58147843676110484}
+  - component: {fileID: 58175133081545206}
   - component: {fileID: 114010949852073760}
   - component: {fileID: 114082580519314054}
   - component: {fileID: 114748884908734108}
+  - component: {fileID: 114617708028736528}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -171,6 +173,21 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.25
+--- !u!58 &58175133081545206
+CircleCollider2D:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529518770281376}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.375
 --- !u!60 &60475872913582252
 PolygonCollider2D:
   m_ObjectHideFlags: 1
@@ -237,6 +254,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _weaponForce: 50
+--- !u!114 &114617708028736528
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1529518770281376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 788f4af93671757458315d4ff5eb6959, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _enemyScanIterationTime: 0.2
+  _damagePerHit: 5
+  _mobTeleportDistance: 4
 --- !u!114 &114748884908734108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -248,7 +279,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d120ad0825c1b94d8d05e5b4b391219, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _initialSheilds: 0
+  _initialSheilds: 100
   _damagePerHit: 5
   _sheildRegenDelayTime: 2
   _sheildRegenIterationTime: 0.2

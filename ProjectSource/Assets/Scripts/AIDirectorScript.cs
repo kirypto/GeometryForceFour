@@ -27,6 +27,8 @@ public class AIDirectorScript : MonoBehaviour
     [SerializeField] private float personalSpaceRadius = 0.5f;
     [SerializeField] private float stdPersonalSpaceScaler = 1f;
 
+    [SerializeField] private int _updateFriendBatchSize = 5;
+
 
     private GameObject[] allMobs;
     private NativeArray<MobComponentData> allMobData;
@@ -278,14 +280,14 @@ public class AIDirectorScript : MonoBehaviour
 //            output = mobFriends
 //        };
 //        JobHandle findFriendsJobHandle = findFriendsJob.Schedule();
-        mobFriends.Clear();
-        for (int index = 0; index < mobCount; index++)
-        {
-            foreach (MobComponentData mobComponentData in _friendDictionary[index])
-            {
-                mobFriends.Add(index, mobComponentData);
-            }
-        }
+//        mobFriends.Clear();
+//        for (int index = 0; index < mobCount; index++)
+//        {
+//            foreach (MobComponentData mobComponentData in _friendDictionary[index])
+//            {
+//                mobFriends.Add(index, mobComponentData);
+//            }
+//        }
 
         Vector3 playerPos = playerTransform.position;
 
@@ -388,7 +390,6 @@ public class AIDirectorScript : MonoBehaviour
 
     private IEnumerator UpdateFriendsCoroutine()
     {
-        const int updateBatchSize = 5;
         int numberUpdated = 0;
         while (true)
         {
@@ -397,7 +398,7 @@ public class AIDirectorScript : MonoBehaviour
             {
                 UpdateFriends(currentMobIndex);
 
-                if (numberUpdated >= updateBatchSize)
+                if (numberUpdated >= _updateFriendBatchSize)
                 {
                     numberUpdated = 0;
 //                    yield return new WaitForSeconds(1f);
@@ -415,15 +416,25 @@ public class AIDirectorScript : MonoBehaviour
 
     private void UpdateFriends(int currentMobIndex)
     {
-        _friendDictionary[currentMobIndex].Clear();
+        mobFriends.Remove(currentMobIndex);
+//        _friendDictionary[currentMobIndex].Clear();
         for (int otherMobIndex = 0; otherMobIndex < mobCount; otherMobIndex++)
         {
             float dist = Vector2.Distance(allMobData[currentMobIndex].Position, allMobData[otherMobIndex].Position);
             if (dist < findFriendRadius)
             {
-                _friendDictionary[currentMobIndex].Add(allMobData[otherMobIndex]);
+                mobFriends.Add(currentMobIndex, allMobData[otherMobIndex]);
+//                _friendDictionary[currentMobIndex].Add(allMobData[otherMobIndex]);
             }
         }
 //        print($"Updated mob friends for: {currentMobIndex}");
     }
+//    mobFriends.Clear();
+//    for (int index = 0; index < mobCount; index++)
+//    {
+//        foreach (MobComponentData mobComponentData in _friendDictionary[index])
+//        {
+//            mobFriends.Add(index, mobComponentData);
+//        }
+//    }
 }

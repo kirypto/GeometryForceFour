@@ -42,8 +42,8 @@ public class PlayerWeaponConeScript : MonoBehaviour
                 layerMask = 1 << LayerMask.NameToLayer("Mobs")
         };
 
-        ScanForOverlappedColliders(_triangleCollider, contactFilter2D, mobsWithinWeaponCone);
-        ScanForOverlappedColliders(_ovalCollider, contactFilter2D, mobsWithinWeaponCone);
+        Utilities.ScanForOverlappedColliders(_triangleCollider, contactFilter2D, mobsWithinWeaponCone);
+        Utilities.ScanForOverlappedColliders(_ovalCollider, contactFilter2D, mobsWithinWeaponCone);
 
         foreach (Collider2D mobCollider in mobsWithinWeaponCone)
         {
@@ -51,19 +51,6 @@ public class PlayerWeaponConeScript : MonoBehaviour
 
             //TODO: Improve performance of this
             mobCollider.GetComponentInParent<Rigidbody2D>().AddForce(directionToMob * _weaponForce);
-        }
-    }
-
-    private static void ScanForOverlappedColliders(Collider2D colliderToScan,
-            ContactFilter2D contactFilter2D,
-            ISet<Collider2D> setToAddFoundCollidersTo,
-            int maxNumberOfCollidersToScan = 100)
-    {
-        Collider2D[] overlappingColliderResultArray = new Collider2D[maxNumberOfCollidersToScan];
-        int numberOfOverlapColliders = colliderToScan.OverlapCollider(contactFilter2D, overlappingColliderResultArray);
-        for (int i = 0; i < numberOfOverlapColliders; i++)
-        {
-            setToAddFoundCollidersTo.Add(overlappingColliderResultArray[i]);
         }
     }
 

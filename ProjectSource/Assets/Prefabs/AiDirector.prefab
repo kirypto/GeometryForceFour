@@ -51,8 +51,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd2c96162412c9f409fc4210ff7d50fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mobCount: 200
+  mobCount: 600
   mobPrefab: {fileID: 1107635731108616, guid: 681aa31864f4dec4ea6d080a00259b0b, type: 2}
+  maxMobSpeed: 8
   findFriendRadius: 5
   moveToPlayerScaler: 1
   targetPlayerInnerRadius: 5
@@ -65,3 +66,4 @@ MonoBehaviour:
   PersonalSpaceToggle: 1
   personalSpaceRadius: 1.5
   stdPersonalSpaceScaler: 3
+  _updateFriendBatchSize: 25

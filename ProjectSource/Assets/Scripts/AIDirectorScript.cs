@@ -261,8 +261,8 @@ public class AIDirectorScript : MonoBehaviour
         {
             var pos = new Vector3()
             {
-                x = Random.Range(-8f, 8f),
-                y = Random.Range(-5f, 5f)
+                x = Random.Range(-35f, 35f),
+                y = Random.Range(-35f, 35f)
             };
 
             var mob = Instantiate(mobPrefab, pos, Quaternion.identity);

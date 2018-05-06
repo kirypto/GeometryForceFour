@@ -310,12 +310,22 @@ Prefab:
     - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
         type: 2}
       propertyPath: mobCount
-      value: 100
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
         type: 2}
       propertyPath: StdCenterMassScaler
       value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: personalSpaceRadius
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: moveToPlayerScaler
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96dd1a44b6e070a4387f298c03a49df3, type: 2}

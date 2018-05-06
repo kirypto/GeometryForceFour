@@ -1,15 +1,25 @@
 ﻿using Unity.Collections;
 using Unity.Jobs;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AIDirectorScript : MonoBehaviour
 {
     [SerializeField] private int mobCount = 100;
     [SerializeField] private GameObject mobPrefab;
+
+    [SerializeField] private float moveToPlayerScaler = 1f;
+
     [SerializeField] private bool CenterMassToggle = true;
     [SerializeField] private float StdCenterMassScaler = 1f;
+
     [SerializeField] private bool EqualizeSpeedToggle = true;
+    [SerializeField] private float equalizeSpeedRadius = 5f;
+    [SerializeField] private float stdEqualizeSpeedScaler = 1f;
+
     [SerializeField] private bool PersonalSpaceToggle = true;
+    [SerializeField] private float personalSpaceRadius = 0.5f;
+    [SerializeField] private float stdPersonalSpaceScaler = 1f;
 
 
     private GameObject[] allMobs;
@@ -105,7 +115,7 @@ public class AIDirectorScript : MonoBehaviour
                     perceivedVelocity += friends[i].Velocity;
                 }
             }
-            
+
             perceivedVelocity = (friends.Length > 1) ? perceivedVelocity / (friends.Length) : perceivedVelocity;
 
             output[index] = new EqualizeSpeedJobOutput()
@@ -119,12 +129,13 @@ public class AIDirectorScript : MonoBehaviour
     {
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
         [ReadOnly] public Vector3 playerPos;
+        [ReadOnly] public float scaler;
 
         public NativeArray<Vector3> output;
 
         public void Execute(int index)
         {
-            output[index] = playerPos - allMobs[index].Position;
+            output[index] = (playerPos - allMobs[index].Position) * scaler;
         }
     }
 
@@ -146,15 +157,15 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
         personalSpaceInputs = GetPrepopArray(new PersonalSpaceJobInput()
         {
-            PersonalSpaceRadius = 0.5f,
-            PersonalSpaceScale = 1f
+            PersonalSpaceRadius = personalSpaceRadius,
+            PersonalSpaceScale = stdPersonalSpaceScaler
         });
 
         equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
         equalizeSpeedInputs = GetPrepopArray(new EqualizeSpeedJobInput()
         {
-            EqualizeSpeedRadius = 5f,
-            EqualizeSpeedScale = 1f
+            EqualizeSpeedRadius = equalizeSpeedRadius,
+            EqualizeSpeedScale = stdEqualizeSpeedScaler
         });
 
         SpawnMobs();
@@ -190,6 +201,7 @@ public class AIDirectorScript : MonoBehaviour
         {
             allMobs = allMobData,
             playerPos = playerPos,
+            scaler = moveToPlayerScaler,
             output = moveToPlayerOutput
         };
 
@@ -242,7 +254,7 @@ public class AIDirectorScript : MonoBehaviour
 
             GameObject mob = allMobs[i];
             mob.GetComponent<Rigidbody2D>().AddForce(data.Velocity);
-            mob.transform.right = data.Velocity;
+            mob.transform.right = data.Velocity.normalized;
             data.Position = mob.transform.position;
             allMobData[i] = data;
         }
@@ -259,7 +271,7 @@ public class AIDirectorScript : MonoBehaviour
 
         personalSpaceInputs.Dispose();
         personalSpaceOutputs.Dispose();
-        
+
         equalizeSpeedInputs.Dispose();
         equalizeSpeedOutputs.Dispose();
     }

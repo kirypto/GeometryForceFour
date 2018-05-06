@@ -24,7 +24,8 @@ public class AIDirectorScript : MonoBehaviour
 
     private GameObject[] allMobs;
     private NativeArray<MobComponentData> allMobData;
-    private NativeArray<NativeList<MobComponentData>> mobFriends;
+//    private NativeArray<NativeList<MobComponentData>> mobFriends;
+    private NativeMultiHashMap<int, MobComponentData> mobFriends;
     private NativeArray<CenterMassJobOutput> centerMassOutputs;
     private NativeArray<EqualizeSpeedJobOutput> equalizeSpeedOutputs;
     private NativeArray<PersonalSpaceJobOutput> personalSpaceOutputs;
@@ -37,17 +38,17 @@ public class AIDirectorScript : MonoBehaviour
         [ReadOnly] public float radius;
         [ReadOnly] public NativeArray<MobComponentData> allMobs;
 
-        public NativeArray<NativeList<MobComponentData>> output;
+        public NativeMultiHashMap<int, MobComponentData> output;
         
         public void Execute(int index)
         {
-            output[index].Clear();
+            output.Remove(index);
             for (int i = 0; i < allMobs.Length; i++)
             {
                 float dist = Vector3.Distance(allMobs[index].Position, allMobs[i].Position);
                 if (dist < radius)
                 {
-                    output[index].Add(allMobs[i]);
+                    output.Add(index, allMobs[i]);
                 }
             }   
         }

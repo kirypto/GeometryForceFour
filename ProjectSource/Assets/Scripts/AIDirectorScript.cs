@@ -9,6 +9,7 @@ public class AIDirectorScript : MonoBehaviour
     [SerializeField] private int mobCount = 100;
     [SerializeField] private GameObject mobPrefab;
     [SerializeField] private float maxMobSpeed = 8f;
+    [SerializeField] private int jobSystemBatchSize = 64;
     [SerializeField] private float findFriendRadius = 5f;
 
     [SerializeField] private float moveToPlayerScaler = 1f;
@@ -298,7 +299,7 @@ public class AIDirectorScript : MonoBehaviour
             output = moveToPlayerOutput
         };
 
-        JobHandle moveToPlayerJobHandle = moveToPlayerJob.Schedule(mobCount, 64);
+        JobHandle moveToPlayerJobHandle = moveToPlayerJob.Schedule(mobCount, jobSystemBatchSize);
 
 
         CenterMassJob centerMassJob = new CenterMassJob()
@@ -308,8 +309,8 @@ public class AIDirectorScript : MonoBehaviour
             scaler = StdCenterMassScaler,
             output = centerMassOutputs
         };
-        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64);
-//        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, 64, findFriendsJobHandle);
+        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, jobSystemBatchSize);
+//        JobHandle centerMassJobHandle = centerMassJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
 
 
         PersonalSpaceJob personalSpaceJob = new PersonalSpaceJob()
@@ -320,8 +321,8 @@ public class AIDirectorScript : MonoBehaviour
             radius = personalSpaceRadius,
             output = personalSpaceOutputs
         };
-        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64);
-//        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, 64, findFriendsJobHandle);
+        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, jobSystemBatchSize);
+//        JobHandle personalSpaceJobHandle = personalSpaceJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
 
 
         EqualizeSpeedJob equalizeSpeedJob = new EqualizeSpeedJob()
@@ -332,8 +333,8 @@ public class AIDirectorScript : MonoBehaviour
             radius = equalizeSpeedRadius,
             output = equalizeSpeedOutputs
         };
-        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64);
-//        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, 64, findFriendsJobHandle);
+        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, jobSystemBatchSize);
+//        JobHandle equalizeSpeedJobHandle = equalizeSpeedJob.Schedule(mobCount, jobSystemBatchSize, findFriendsJobHandle);
 
         moveToPlayerJobHandle.Complete();
         centerMassJobHandle.Complete();

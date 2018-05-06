@@ -7,6 +7,7 @@ public class AIDirectorScript : MonoBehaviour
 {
     [SerializeField] private int mobCount = 100;
     [SerializeField] private GameObject mobPrefab;
+    [SerializeField] private float maxMobSpeed = 8f;
     [SerializeField] private float findFriendRadius = 5f;
 
     [SerializeField] private float moveToPlayerScaler = 1f;
@@ -324,7 +325,7 @@ public class AIDirectorScript : MonoBehaviour
             data.Velocity += personalSpaceOutputs[i].PersonalSpace;
             data.Velocity += equalizeSpeedOutputs[i].EqualizeSpeed;
 
-            data.Velocity = Vector3.ClampMagnitude(data.Velocity, 8f);
+            data.Velocity = Vector3.ClampMagnitude(data.Velocity, maxMobSpeed);
 
 
             GameObject mob = allMobs[i];

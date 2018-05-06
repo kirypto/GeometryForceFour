@@ -24,12 +24,34 @@ public class AIDirectorScript : MonoBehaviour
 
     private GameObject[] allMobs;
     private NativeArray<MobComponentData> allMobData;
+    private NativeArray<NativeList<MobComponentData>> mobFriends;
     private NativeArray<CenterMassJobOutput> centerMassOutputs;
     private NativeArray<EqualizeSpeedJobOutput> equalizeSpeedOutputs;
     private NativeArray<PersonalSpaceJobOutput> personalSpaceOutputs;
 
     private NativeArray<Vector3> moveToPlayerOutput;
     private Transform playerTransform;
+
+    struct FindFriendsJob : IJobParallelFor
+    {
+        [ReadOnly] public float radius;
+        [ReadOnly] public NativeArray<MobComponentData> allMobs;
+
+        public NativeArray<NativeList<MobComponentData>> output;
+        
+        public void Execute(int index)
+        {
+            output[index].Clear();
+            for (int i = 0; i < allMobs.Length; i++)
+            {
+                float dist = Vector3.Distance(allMobs[index].Position, allMobs[i].Position);
+                if (dist < radius)
+                {
+                    output[index].Add(allMobs[i]);
+                }
+            }   
+        }
+    }
 
 
     struct CenterMassJob : IJobParallelFor
@@ -152,6 +174,12 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs = new NativeArray<PersonalSpaceJobOutput>(mobCount, Allocator.Persistent);
 
         equalizeSpeedOutputs = new NativeArray<EqualizeSpeedJobOutput>(mobCount, Allocator.Persistent);
+        
+//        mobFriends = new NativeArray<NativeList<MobComponentData>>(mobCount, Allocator.Persistent);
+//        for (int i = 0; i < mobFriends.Length; i++)
+//        {
+//            mobFriends[i] = new NativeList<MobComponentData>(Allocator.Persistent); 
+//        }
 
         SpawnMobs();
     }
@@ -179,8 +207,16 @@ public class AIDirectorScript : MonoBehaviour
 
     private void Update()
     {
-        Vector3 playerPos = playerTransform.position;
+//        FindFriendsJob findFriendsJob = new FindFriendsJob()
+//        {
+//            allMobs = allMobData,
+//            radius = 5f,
+//            output = mobFriends
+//        };
+//        JobHandle findFriendsJobHandle = findFriendsJob.Schedule(mobCount, 64);
+//        findFriendsJobHandle.Complete(); // complete now to service other jobs
 
+        Vector3 playerPos = playerTransform.position;
 
         var moveToPlayerJob = new MoveToPlayerJob()
         {
@@ -258,6 +294,11 @@ public class AIDirectorScript : MonoBehaviour
         personalSpaceOutputs.Dispose();
 
         equalizeSpeedOutputs.Dispose();
+        
+//        foreach (var frnd in mobFriends) {            
+//            frnd.Dispose();
+//        }
+//        mobFriends.Dispose();
     }
 
     private NativeArray<T> GetPrepopArray<T>(T defVal) where T : struct

@@ -11,3 +11,4 @@
 *.pdf			-text
 *.unitypackage	-text
 *.chm			-text
+*.wav			-text

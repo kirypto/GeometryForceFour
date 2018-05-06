@@ -123,6 +123,8 @@ GameObject:
   - component: {fileID: 20419841}
   - component: {fileID: 20419843}
   - component: {fileID: 20419842}
+  - component: {fileID: 20419845}
+  - component: {fileID: 20419844}
   m_Layer: 0
   m_Name: Totum 3
   m_TagString: Untagged
@@ -206,6 +208,43 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
+--- !u!61 &20419844
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 20419840}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 2.4, y: 2.37}
+    newSize: {x: 2.4, y: 2.37}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 2.4, y: 2.37}
+  m_EdgeRadius: 0
+--- !u!114 &20419845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 20419840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97adc322f134ae4cb85246d708e33a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldBlink: 0
 --- !u!1 &52003916
 GameObject:
   m_ObjectHideFlags: 0
@@ -215,8 +254,9 @@ GameObject:
   m_Component:
   - component: {fileID: 52003919}
   - component: {fileID: 52003918}
-  - component: {fileID: 52003917}
   - component: {fileID: 52003920}
+  - component: {fileID: 52003921}
+  - component: {fileID: 52003917}
   m_Layer: 0
   m_Name: Totum 1
   m_TagString: Untagged
@@ -325,6 +365,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.4, y: 2.37}
   m_EdgeRadius: 0
+--- !u!114 &52003921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 52003916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97adc322f134ae4cb85246d708e33a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldBlink: 0
 --- !u!1 &343862321
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +388,7 @@ GameObject:
   - component: {fileID: 343862324}
   - component: {fileID: 343862323}
   - component: {fileID: 343862325}
+  - component: {fileID: 343862326}
   m_Layer: 0
   m_Name: Totum 4
   m_TagString: Untagged
@@ -444,6 +497,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.4, y: 2.37}
   m_EdgeRadius: 0
+--- !u!114 &343862326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 343862321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97adc322f134ae4cb85246d708e33a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldBlink: 0
 --- !u!1 &383850234
 GameObject:
   m_ObjectHideFlags: 0
@@ -455,6 +520,7 @@ GameObject:
   - component: {fileID: 383850237}
   - component: {fileID: 383850236}
   - component: {fileID: 383850238}
+  - component: {fileID: 383850239}
   m_Layer: 0
   m_Name: Totum 2
   m_TagString: Untagged
@@ -563,6 +629,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 2.4, y: 2.37}
   m_EdgeRadius: 0
+--- !u!114 &383850239
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 383850234}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a97adc322f134ae4cb85246d708e33a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ShouldBlink: 0
 --- !u!1 &1226125329
 GameObject:
   m_ObjectHideFlags: 0
@@ -643,4 +721,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1921435013
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1921435014}
+  m_Layer: 0
+  m_Name: PlayerSprite
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1921435014
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1921435013}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

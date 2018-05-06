@@ -53,11 +53,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mobCount: 750
   mobPrefab: {fileID: 1107635731108616, guid: 681aa31864f4dec4ea6d080a00259b0b, type: 2}
-  maxMobSpeed: 9
+  maxMobSpeed: 15
   jobSystemBatchSize: 64
   findFriendRadius: 5
   moveToPlayerScaler: 1.2
-  targetPlayerInnerRadius: 5
+  targetPlayerInnerRadius: 10
   targetPlayerOutterRadius: 30
   CenterMassToggle: 1
   StdCenterMassScaler: 5

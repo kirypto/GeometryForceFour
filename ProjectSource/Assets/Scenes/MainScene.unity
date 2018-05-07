@@ -152,6 +152,46 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: mobCount
+      value: 1000
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: maxMobSpeed
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: jobSystemBatchSize
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: _updateFriendBatchSize
+      value: 75
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: moveToPlayerScaler
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: stdPersonalSpaceScaler
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: _updateFriendsCoroutineIterationTime
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114997108522151052, guid: 96dd1a44b6e070a4387f298c03a49df3,
+        type: 2}
+      propertyPath: targetPlayerOutterRadius
+      value: 25
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 96dd1a44b6e070a4387f298c03a49df3, type: 2}
   m_IsPrefabParent: 0
@@ -434,6 +474,16 @@ Prefab:
       propertyPath: m_Layer
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 114748884908734108, guid: 1cdf61ba1b009e247924f44a6119d712,
+        type: 2}
+      propertyPath: _damagePerHit
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114082580519314054, guid: 1cdf61ba1b009e247924f44a6119d712,
+        type: 2}
+      propertyPath: _weaponForce
+      value: 500
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1cdf61ba1b009e247924f44a6119d712, type: 2}
   m_IsPrefabParent: 0
@@ -475,6 +525,11 @@ Prefab:
     - target: {fileID: 4877435374824398, guid: e6d924299eef48d439a55c740364e3e9, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 20283568636844560, guid: e6d924299eef48d439a55c740364e3e9,
+        type: 2}
+      propertyPath: orthographic size
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: e6d924299eef48d439a55c740364e3e9, type: 2}

@@ -221,7 +221,12 @@ public class AIDirectorScript : MonoBehaviour
             float dist = Vector3.Distance(playerPos, allMobs[index].Position);
             if (dist < targetPlayerInnerRadius || dist > targetPlayerOutterRadius)
             {
-                output[index] = (playerPos - allMobs[index].Position) * scaler;
+                Vector3 vectorToPlayer = (playerPos - allMobs[index].Position);
+                if (vectorToPlayer.magnitude < 2f)
+                {
+                    vectorToPlayer = vectorToPlayer.normalized * 3f;
+                }
+                output[index] = vectorToPlayer * scaler;
             }
         }
     }

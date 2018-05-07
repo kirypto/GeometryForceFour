@@ -15,7 +15,7 @@ public class PlayerMovementScript : MonoBehaviour
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector2(Input.mousePosition.x, Input.mousePosition.y));
         Vector2 vectorToMouse = ((Vector2)(mousePosition - transform.position)).normalized;
